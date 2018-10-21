@@ -1,5 +1,6 @@
 package com.devan.Menu.service;
 
+import com.devan.Menu.dao.enums.ErrorMessage;
 import com.devan.Menu.dao.model.Ingredient;
 import com.devan.Menu.dao.repository.IngredientRepository;
 import com.devan.Menu.web.dto.IngredientDto;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +37,8 @@ public class IngredientService {
 //    }
 
     public Ingredient findById(Long id) {
-        return ingredientRepository.getOne(id);
+        return ingredientRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException(ErrorMessage.NOT_FOUND.getMessage() + id));
     }
 
     public List<IngredientDto> findIngredientsByType(String type) {
@@ -47,16 +50,15 @@ public class IngredientService {
     }
 
     public IngredientDto updateIngredient(IngredientDto ingredientDto, Long id) {
-        Ingredient ingredient = ingredientRepository.getOne(id);
+        Ingredient ingredient = findById(id);
         ingredient = ingredientDto.toEntity(ingredient);
         ingredient.setLastUpdatedAt(Instant.now());
-        ingredient = ingredientRepository.save(ingredient);
 
         return new IngredientDto().fromEntity(ingredient);
     }
 
     public void deleteIngredient(Long id) {
-        Ingredient ingredient = ingredientRepository.getOne(id);
+        Ingredient ingredient = findById(id);
         ingredientRepository.delete(ingredient);
     }
 }
