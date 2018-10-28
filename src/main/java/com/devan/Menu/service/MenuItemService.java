@@ -5,7 +5,7 @@ import com.devan.Menu.dao.model.MenuItem;
 import com.devan.Menu.dao.model.MenuItemIngredient;
 import com.devan.Menu.dao.repository.MenuItemRepository;
 import com.devan.Menu.web.dto.MenuItemDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.devan.Menu.web.mapper.MenuItemMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,15 +16,21 @@ import java.util.ArrayList;
 @Transactional
 public class MenuItemService {
 
-    @Autowired
-    MenuItemRepository menuItemRepository;
+    private final MenuItemRepository repository;
 
-    @Autowired
-    IngredientService ingredientService;
+    private final MenuItemMapper mapper;
+
+    private final IngredientService ingredientService;
+
+    public MenuItemService(MenuItemRepository menuItemRepository, MenuItemMapper menuItemMapper, IngredientService ingredientService) {
+        this.repository = menuItemRepository;
+        this.mapper = menuItemMapper;
+        this.ingredientService = ingredientService;
+    }
 
     public MenuItemDto createMenuItem(MenuItemDto menuItemDto) {
 
-        MenuItem menuItem = menuItemDto.toEntity();
+        MenuItem menuItem = mapper.mapToEntity(menuItemDto);
 
         menuItemDto.getIngredients()
                 .forEach(ingredientQuantityDto -> {
@@ -38,8 +44,8 @@ public class MenuItemService {
                 });
 
         menuItem.setPostedAt(Instant.now());
-        menuItemRepository.save(menuItem);
+        repository.save(menuItem);
 
-        return new MenuItemDto().fromEntity(menuItem);
+        return mapper.mapToDto(menuItem);
     }
 }
