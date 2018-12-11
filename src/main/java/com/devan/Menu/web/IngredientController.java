@@ -25,7 +25,8 @@ public class IngredientController {
         this.service = ingredientService;
     }
 
-    @PostMapping("post")
+    // TODO: Not working
+    @PostMapping("")
     public ResponseEntity<IngredientDto> postIngredient(@Valid @RequestBody IngredientDto ingredientDto, BindingResult result) throws ValidationException {
 //        validator.validate(ingredientDto, result);
 //
@@ -39,12 +40,12 @@ public class IngredientController {
     }
 
 
-    @GetMapping("get/{type}")
+    @GetMapping("{type}")
     public List<IngredientDto> getIngredients(@PathVariable IngredientType type) {
         return service.findIngredientsByType(type);
     }
 
-    @PutMapping("put/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<IngredientDto> putIngredient(@Valid @RequestBody IngredientDto ingredientDto, @PathVariable Long id, BindingResult result) throws ValidationException {
         ingredientDto.setId(id);
         validator.validate(ingredientDto, result);
@@ -58,7 +59,7 @@ public class IngredientController {
                 .body(service.updateIngredient(ingredientDto, id));
     }
 //
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity deleteIngredient(@PathVariable Long id) {
         service.deleteIngredient(id);
 

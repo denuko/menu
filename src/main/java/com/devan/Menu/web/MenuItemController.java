@@ -22,14 +22,14 @@ public class MenuItemController {
 
     // TODO: Add get, put, delete
     // TODO: Validate
-    @PostMapping("post")
+    @PostMapping("")
     public ResponseEntity<MenuItemDto> postMenuItem(@RequestBody MenuItemDto menuItemDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createMenuItem(menuItemDto));
     }
 
-    @GetMapping("get/{ingredientType}")
+    @GetMapping("{ingredientType}")
     public List<MenuItemDto> getMenuItemsByIngredientType(@PathVariable IngredientType ingredientType) {
         return service.findMenuItemsByIngredientType(ingredientType);
     }
