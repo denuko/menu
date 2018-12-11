@@ -1,8 +1,8 @@
 package com.devan.Menu.web.mapper;
 
-import org.mapstruct.MappingTarget;
+        import org.mapstruct.MappingTarget;
 
-import java.util.List;
+        import java.util.List;
 
 public interface MyMapper<E, D> {
     E mapToEntity(D dto);
