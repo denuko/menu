@@ -9,7 +9,7 @@ public class IngredientValidator {
 
     public void validate(IngredientDto dto, BindingResult result) {
         if (!(dto.getId() > 0)) {
-            result.rejectValue("id", "INVALID_ID", "id must be positive integer");
+            result.rejectValue("id", "INVALID", "id must be positive integer");
         }
     }
 }

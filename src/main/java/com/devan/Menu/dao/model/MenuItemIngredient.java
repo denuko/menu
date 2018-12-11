@@ -1,6 +1,7 @@
 package com.devan.Menu.dao.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class MenuItemIngredient implements Serializable {
 
     @Id
