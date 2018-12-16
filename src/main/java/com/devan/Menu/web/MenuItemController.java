@@ -3,10 +3,11 @@ package com.devan.Menu.web;
 import com.devan.Menu.dao.enums.IngredientType;
 import com.devan.Menu.service.MenuItemService;
 import com.devan.Menu.web.dto.MenuItemDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,9 +25,16 @@ public class MenuItemController {
     // TODO: Validate
     @PostMapping("")
     public ResponseEntity<MenuItemDto> postMenuItem(@RequestBody MenuItemDto menuItemDto) {
+        menuItemDto = service.createMenuItem(menuItemDto);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(menuItemDto.getId()).toUri();
+
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(service.createMenuItem(menuItemDto));
+                .created(location)
+                .body(menuItemDto);
     }
 
     @GetMapping("{ingredientType}")

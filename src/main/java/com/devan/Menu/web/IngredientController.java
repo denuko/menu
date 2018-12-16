@@ -9,8 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,9 +36,16 @@ public class IngredientController {
             throw new ValidationException(result);
         }
 
+        ingredientDto = service.createIngredient(ingredientDto);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(ingredientDto.getId()).toUri();
+
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(service.createIngredient(ingredientDto));
+                .created(location)
+                .body(ingredientDto);
     }
 
 
